@@ -5,6 +5,7 @@ import TestimonialCard from './components/TestimonialCard';
 import Hero from './components/Hero';
 import { testimonials } from './data/testimonials';
 import { useTranslation } from './i18n/LanguageContext';
+import { MeshBackground, GrainOverlay } from './components/PremiumEffects';
 
 // Pages
 import AboutPage from './pages/AboutPage';
@@ -14,15 +15,15 @@ import ContactPage from './pages/ContactPage';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
-const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 }
+const pageVariants: any = {
+  initial: { opacity: 0, scale: 0.98 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 1.02, transition: { duration: 0.4, ease: "easeInOut" } }
 };
 
 function App() {
   const [activeTab, setActiveTab] = useState('testimonials');
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -34,17 +35,41 @@ function App() {
         return <AdmissionsPage />;
       case 'alumni':
         return (
-          <div className="py-20 text-center space-y-12">
-            <h1 className="text-6xl font-black text-academy-navy">{t.alumni.title} <span className="text-academy-orange">{t.alumni.span}</span></h1>
-            <p className="max-w-2xl mx-auto text-xl text-gray-500">
-              {t.alumni.desc}
-            </p>
-            <div className="flex justify-center flex-wrap gap-8 opacity-50">
-              {['Harvard', 'Stanford', 'Oxford', 'Cambridge', 'NUS', 'MIT'].map(uni => (
-                <span key={uni} className="text-3xl font-black tracking-tighter">{uni.toUpperCase()}</span>
-              ))}
+          <div className="py-32 px-4 text-center space-y-20 relative overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(184,134,11,0.05)_0%,transparent_70%)] -z-10" />
+
+            <div className="space-y-6">
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-7xl md:text-9xl font-serif font-black text-academy-navy tracking-tight"
+              >
+                {t.alumni.title} <br />
+                <span className="text-academy-orange italic">{t.alumni.span}</span>
+              </motion.h1>
+              <p className="max-w-3xl mx-auto text-xl md:text-2xl text-gray-500 font-light leading-relaxed">
+                {t.alumni.desc}
+              </p>
             </div>
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-20">
+
+            {/* Premium University Ticker */}
+            <div className="relative py-10 bg-academy-navy text-white -mx-4 overflow-hidden">
+              <motion.div
+                animate={{ x: [0, -1000] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="flex whitespace-nowrap gap-20 items-center"
+              >
+                {[...Array(2)].map((_, i) => (
+                  <div key={i} className="flex gap-20 items-center">
+                    {['Harvard', 'Stanford', 'Oxford', 'Cambridge', 'NUS', 'MIT', 'Princeton', 'Yale'].map(uni => (
+                      <span key={uni} className="text-5xl font-serif font-bold italic opacity-30 hover:opacity-100 transition-opacity cursor-default tracking-tighter">{uni}</span>
+                    ))}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 text-left mt-20">
               {testimonials.slice(0, 4).map(t => <TestimonialCard key={t.id} testimonial={t} />)}
             </div>
           </div>
@@ -53,9 +78,9 @@ function App() {
         return (
           <>
             <Hero />
-            <section className="py-20 lg:py-32 bg-white">
+            <section className="py-24 lg:py-40 bg-white/50 relative">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
                   {testimonials.map((testimonial) => (
                     <TestimonialCard key={testimonial.id} testimonial={testimonial} />
                   ))}
@@ -72,10 +97,13 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white selection:bg-academy-orange selection:text-white">
+    <div className="min-h-screen bg-white relative selection:bg-academy-orange selection:text-white">
+      <MeshBackground />
+      <GrainOverlay />
+
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main>
+      <main className="relative z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -83,37 +111,43 @@ function App() {
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
           >
             {renderContent()}
           </motion.div>
         </AnimatePresence>
 
         {activeTab !== 'contact' && (
-          <section className="py-20 bg-white">
+          <section className="py-40 bg-transparent">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-academy-navy rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-r from-academy-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="bg-academy-navy rounded-[4rem] p-16 md:p-32 text-center relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,31,63,0.3)]"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-academy-orange/20 via-transparent to-academy-gold/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+                <h2 className="text-5xl md:text-8xl font-serif font-black text-white mb-10 tracking-tight leading-none">
                   {t.cta.title.split(' ').map((word: string, i: number) =>
                     word.toLowerCase() === 'future' || word.toLowerCase() === 'kelajagingizni' || word.toLowerCase() === 'будущее' ?
-                      <span key={i} className="text-academy-orange underline decoration-[8px] underline-offset-[12px]">{word} </span> : word + ' '
+                      <span key={i} className="text-academy-orange italic block md:inline underline decoration-[6px] underline-offset-[15px]">{word} </span> : word + ' '
                   )}
                 </h2>
-                <p className="text-gray-400 text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+
+                <p className="text-gray-400 text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-light">
                   {t.cta.desc}
                 </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.1, boxShadow: "0 20px 40px rgba(255,138,0,0.4)" }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveTab('contact')}
-                    className="bg-academy-orange text-white px-12 py-5 rounded-2xl font-black text-xl shadow-2xl shadow-academy-orange/30"
+                    className="bg-academy-orange text-white px-16 py-6 rounded-[2rem] font-black text-2xl shadow-2xl transition-all"
                   >
                     {t.cta.button}
                   </motion.button>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </section>
         )}
