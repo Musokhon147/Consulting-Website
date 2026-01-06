@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from '../i18n/LanguageContext';
 import { Unmask } from './PremiumEffects';
+import LottieAnimation from './LottieAnimation';
 
 const Hero: React.FC = () => {
     const { t } = useTranslation();
@@ -13,13 +14,13 @@ const Hero: React.FC = () => {
     const scale = useTransform(scrollY, [0, 500], [1, 1.2]);
 
     return (
-        <section ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-academy-navy">
+        <section ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-academy-navy dark:bg-academy-deepNavy">
             {/* Cinematic Background Video / Image with Parallax */}
             <motion.div
                 style={{ y: y1, scale }}
                 className="absolute inset-0 z-0"
             >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,31,63,0.4)_0%,#001F3F_100%)] z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-academy-navy/60 dark:from-academy-deepNavy/80 via-academy-navy/20 to-academy-navy dark:to-academy-deepNavy z-10" />
                 <img
                     src="https://images.unsplash.com/photo-1541339907198-e08756ebafe1?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80"
                     alt="University Background"
@@ -35,6 +36,12 @@ const Hero: React.FC = () => {
                     transition={{ duration: 1.5 }}
                     className="space-y-10"
                 >
+                    <div className="flex justify-center mb-4">
+                        <LottieAnimation
+                            url="https://lottie.host/804d9c7e-00e9-4672-970d-ec60867456d9/0C4D9V7W6C.json"
+                            className="w-32 h-32 md:w-48 md:h-48"
+                        />
+                    </div>
                     <div className="flex justify-center items-center space-x-4 mb-4">
                         <div className="h-[2px] w-12 bg-academy-gold/50" />
                         <span className="text-xs font-black uppercase tracking-[0.4em] text-academy-gold">{t.hero.home.toUpperCase()}</span>

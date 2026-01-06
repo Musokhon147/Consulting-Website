@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: ["class"],
   theme: {
     extend: {
       colors: {
@@ -13,6 +14,9 @@ export default {
           orange: '#FF8A00',
           gray: '#333333',
           lightGray: '#F5F5F5',
+          deepNavy: '#000000', // Updated to pure black
+          dark: '#000000',     // Pure black for dark mode
+          light: '#ffffff',    // Pure white for light mode
         }
       },
       fontFamily: {

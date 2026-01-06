@@ -1,124 +1,106 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Instagram, Youtube, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Clock } from 'lucide-react';
 import { useTranslation } from '../i18n/LanguageContext';
+import { Unmask } from '../components/PremiumEffects';
 
 const ContactPage: React.FC = () => {
     const { t } = useTranslation();
 
     return (
-        <div className="bg-white min-h-screen">
-            <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div className="bg-white dark:bg-academy-deepNavy min-h-screen pt-32 pb-24 transition-colors duration-500">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
 
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="space-y-12"
-                    >
-                        <div>
-                            <h1 className="text-5xl font-black text-academy-navy mb-6 tracking-tight italic">
-                                {t.contact.title} <span className="text-academy-orange">{t.contact.span}</span>
-                            </h1>
-                            <p className="text-lg text-gray-600 leading-relaxed max-w-md font-medium">
-                                {t.contact.desc}
-                            </p>
+                    {/* Left: Content */}
+                    <div className="space-y-12">
+                        <div className="space-y-6">
+                            <Unmask>
+                                <h1 className="text-7xl md:text-9xl font-serif font-black text-academy-navy dark:text-white italic tracking-tighter leading-none">
+                                    {t.contact.title}
+                                </h1>
+                            </Unmask>
+                            <Unmask delay={0.2}>
+                                <p className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-xl">
+                                    {t.contact.desc}
+                                </p>
+                            </Unmask>
                         </div>
 
-                        <div className="space-y-8">
-                            <div className="flex items-center gap-6 group cursor-pointer">
-                                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-academy-navy group-hover:bg-academy-navy group-hover:text-white transition-all">
-                                    <Mail size={24} />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">{t.contact.email}</p>
-                                    <p className="text-lg font-bold text-academy-navy">hello@freshman.academy</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-6 group cursor-pointer">
-                                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-academy-navy group-hover:bg-academy-navy group-hover:text-white transition-all">
-                                    <Phone size={24} />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">{t.contact.call}</p>
-                                    <p className="text-lg font-bold text-academy-navy">+65 8000 1234</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-6 group cursor-pointer">
-                                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-academy-navy group-hover:bg-academy-navy group-hover:text-white transition-all">
-                                    <MapPin size={24} />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">{t.contact.office}</p>
-                                    <p className="text-lg font-bold text-academy-navy">160 Robinson Road #14-04</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="pt-10 flex gap-6">
-                            {[Send, Instagram, Youtube, Globe].map((Icon, idx) => (
-                                <motion.a
-                                    key={idx}
-                                    href="#"
-                                    whileHover={{ scale: 1.1, y: -5 }}
-                                    className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-academy-orange hover:text-white transition-colors"
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            {[
+                                { icon: <Phone />, label: t.contact.phone, val: '+998 90 123 45 67' },
+                                { icon: <Mail />, label: t.contact.email, val: 'info@freshman.academy' },
+                                { icon: <MapPin />, label: t.contact.address, val: '160 Robinson Road, Singapore' },
+                                { icon: <Clock />, label: 'Hours', val: 'Mon - Fri, 9:00 - 18:00' }
+                            ].map((info, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: i * 0.1 }}
+                                    className="p-8 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-100 dark:border-white/10 group hover:bg-academy-navy dark:hover:bg-academy-orange transition-all duration-500"
                                 >
-                                    <Icon size={20} />
-                                </motion.a>
+                                    <div className="w-12 h-12 bg-white dark:bg-academy-deepNavy text-academy-orange rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                                        {React.cloneElement(info.icon as React.ReactElement<any>, { size: 24 })}
+                                    </div>
+                                    <p className="text-xs font-black uppercase tracking-widest text-gray-400 group-hover:text-white/60 mb-1">{info.label}</p>
+                                    <p className="text-lg font-serif font-black text-academy-navy dark:text-white group-hover:text-white leading-tight">{info.val}</p>
+                                </motion.div>
                             ))}
                         </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="bg-gray-50 p-10 md:p-16 rounded-[3rem] border border-gray-100 shadow-2xl shadow-gray-200/50"
-                    >
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-black text-academy-navy ml-2">{t.contact.form.name}</label>
-                                    <input type="text" placeholder="John Doe" className="w-full bg-white border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-academy-orange/10 focus:border-academy-orange outline-none transition-all placeholder:text-gray-300" />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-black text-academy-navy ml-2">{t.contact.form.email}</label>
-                                    <input type="email" placeholder="john@example.com" className="w-full bg-white border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-academy-orange/10 focus:border-academy-orange outline-none transition-all placeholder:text-gray-300" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-black text-academy-navy ml-2">{t.contact.form.interest}</label>
-                                <select className="w-full bg-white border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-academy-orange/10 focus:border-academy-orange outline-none transition-all appearance-none">
-                                    <option>Ivy League Admissions</option>
-                                    <option>Masters Strategy</option>
-                                    <option>English Proficiency</option>
-                                    <option>General Consultation</option>
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-black text-academy-navy ml-2">{t.contact.form.message}</label>
-                                <textarea rows={4} placeholder="How can we help you?" className="w-full bg-white border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-academy-orange/10 focus:border-academy-orange outline-none transition-all placeholder:text-gray-300 resize-none"></textarea>
-                            </div>
-                            <button className="w-full bg-academy-navy text-white py-5 rounded-2xl font-black text-lg hover:bg-academy-navy/90 transition-all shadow-xl shadow-academy-navy/20">
-                                {t.contact.form.button}
-                            </button>
-                        </form>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Map Mockup */}
-            <section className="px-4 pb-24">
-                <div className="max-w-7xl mx-auto h-[400px] bg-gray-100 rounded-[3rem] overflow-hidden border border-gray-200 relative group grayscale hover:grayscale-0 transition-all duration-700">
-                    <div className="absolute inset-0 flex items-center justify-center z-10">
-                        <div className="bg-white/80 backdrop-blur-md px-8 py-4 rounded-full shadow-xl font-bold text-academy-navy flex items-center gap-3">
-                            <MapPin className="text-academy-orange" /> {t.contact.map}
-                        </div>
                     </div>
-                    <img src="https://images.unsplash.com/photo-1522071823947-415f0d2bb24d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Map" className="w-full h-full object-cover opacity-50" />
+
+                    {/* Right: Form */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        className="bg-academy-navy dark:bg-white/5 p-12 lg:p-20 rounded-[4rem] shadow-2xl relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-academy-orange/20 blur-[100px] -translate-y-1/2 translate-x-1/2" />
+
+                        <div className="relative z-10 space-y-10">
+                            <h2 className="text-4xl font-serif font-black text-white italic">{t.contact.form.title}</h2>
+
+                            <form className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-4">{t.contact.form.name}</label>
+                                    <input
+                                        type="text"
+                                        className="w-full bg-white/10 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-academy-orange transition-colors"
+                                        placeholder="John Doe"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-4">{t.contact.form.email}</label>
+                                    <input
+                                        type="email"
+                                        className="w-full bg-white/10 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-academy-orange transition-colors"
+                                        placeholder="john@example.com"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-4">{t.contact.form.message}</label>
+                                    <textarea
+                                        rows={4}
+                                        className="w-full bg-white/10 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-academy-orange transition-colors resize-none"
+                                        placeholder="Your message here..."
+                                    />
+                                </div>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="w-full bg-academy-orange text-white py-6 rounded-2xl font-black text-xl flex items-center justify-center gap-4 shadow-2xl shadow-academy-orange/30 group"
+                                >
+                                    <span>{t.contact.form.button}</span>
+                                    <Send size={24} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500" />
+                                </motion.button>
+                            </form>
+                        </div>
+                    </motion.div>
                 </div>
-            </section>
+            </div>
         </div>
     );
 };

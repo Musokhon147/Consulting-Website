@@ -1,136 +1,91 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { ClipboardCheck, Search, PenTool, Mic, PartyPopper } from 'lucide-react';
+import React from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { useTranslation } from '../i18n/LanguageContext';
+import { Unmask } from '../components/PremiumEffects';
 
 const AdmissionsPage: React.FC = () => {
     const { t } = useTranslation();
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end end"]
-    });
-
-    const scaleY = useSpring(scrollYProgress, {
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
         damping: 30,
         restDelta: 0.001
     });
 
-    const icons = [<Search />, <ClipboardCheck />, <PenTool />, <Mic />, <PartyPopper />];
-    const colors = ["bg-orange-500", "bg-blue-600", "bg-indigo-600", "bg-purple-600", "bg-academy-gold"];
-
     return (
-        <div className="bg-white pb-32 overflow-hidden" ref={containerRef}>
-            {/* Premium Hero */}
-            <section className="relative py-32 lg:py-48 bg-academy-navy text-white overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-6xl md:text-8xl font-serif font-black mb-8 leading-tight italic tracking-tight"
-                    >
-                        {t.admissions.title} <br />
-                        <span className="text-academy-gold">{t.admissions.span}</span>
-                    </motion.h1>
-                    <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
-                        {t.admissions.desc}
-                    </p>
+        <div className="bg-white dark:bg-academy-deepNavy min-h-screen pt-32 transition-colors duration-500">
+            {/* Progress Top Bar */}
+            <motion.div
+                className="fixed top-0 left-0 right-0 h-1 bg-academy-orange z-[110] origin-left"
+                style={{ scaleX }}
+            />
+
+            <div className="max-w-4xl mx-auto px-6 lg:px-8 pb-32">
+                <div className="text-center space-y-6 mb-32">
+                    <Unmask>
+                        <h1 className="text-7xl md:text-9xl font-serif font-black text-academy-navy dark:text-white italic tracking-tighter">
+                            {t.admissions.title}
+                        </h1>
+                    </Unmask>
+                    <Unmask delay={0.2}>
+                        <div className="flex justify-center items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-academy-orange">
+                            <span className="w-12 h-[1px] bg-academy-orange/30" />
+                            Step-by-step Guide
+                            <span className="w-12 h-[1px] bg-academy-orange/30" />
+                        </div>
+                    </Unmask>
                 </div>
 
-                {/* Animated Light Rays */}
-                <div className="absolute inset-0 z-0">
-                    <motion.div
-                        animate={{ opacity: [0.1, 0.3, 0.1], rotate: 360 }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                        className="absolute -top-1/2 -left-1/4 w-[150vw] h-[150vw] bg-[radial-gradient(circle,rgba(184,134,11,0.1)_0%,transparent_70%)]"
-                    />
-                </div>
-            </section>
+                <div className="relative space-y-24">
+                    {/* Vertical Connecting Line */}
+                    <div className="absolute left-[27px] top-4 bottom-4 w-[2px] bg-gray-100 dark:bg-white/10" />
 
-            {/* Interactive Timeline */}
-            <section className="py-32 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Scroll-linked line */}
-                <div className="absolute left-[38px] md:left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2 overflow-hidden">
-                    <motion.div
-                        style={{ scaleY }}
-                        className="w-full h-full bg-gradient-to-b from-academy-gold to-academy-orange origin-top"
-                    />
-                </div>
-
-                <div className="space-y-40 relative">
-                    {t.admissions.steps.map((step: any, idx: number) => (
+                    {t.admissions.steps.map((step: any, index: number) => (
                         <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, y: 100 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.8 }}
-                            className={`relative flex flex-col md:flex-row items-center justify-between ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                            className="relative pl-20 group"
                         >
-                            {/* Step Number Dot */}
-                            <div className="absolute left-[-10px] md:left-1/2 top-0 w-20 h-20 -translate-x-1/2 flex items-center justify-center z-20">
-                                <motion.div
-                                    whileHover={{ scale: 1.2, rotate: 90 }}
-                                    className="w-16 h-16 rounded-3xl bg-white shadow-xl shadow-academy-navy/5 border border-gray-100 flex items-center justify-center text-academy-navy transform transition-all"
-                                >
-                                    <div className={`p-3 rounded-2xl ${colors[idx]} text-white`}>
-                                        {React.cloneElement(icons[idx] as React.ReactElement, { size: 24 })}
-                                    </div>
-                                </motion.div>
+                            <div className="absolute left-0 top-0 w-14 h-14 bg-white dark:bg-academy-deepNavy border-2 border-academy-navy dark:border-academy-orange rounded-full flex items-center justify-center z-10 group-hover:bg-academy-navy dark:group-hover:bg-academy-orange transition-colors duration-500">
+                                <span className="text-xl font-black text-academy-navy dark:text-white group-hover:text-white">
+                                    {index + 1}
+                                </span>
                             </div>
 
-                            {/* Timeline Content */}
-                            <div className={`w-full md:w-[42%] flex flex-col ${idx % 2 === 0 ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}`}>
-                                <motion.div
-                                    whileHover={{ y: -10 }}
-                                    className="bg-white/80 backdrop-blur-xl p-10 lg:p-14 rounded-[3.5rem] border border-gray-50 shadow-2xl shadow-gray-100 group relative overflow-hidden"
-                                >
-                                    <div className={`absolute top-0 ${idx % 2 === 0 ? 'right-0' : 'left-0'} w-24 h-24 bg-gradient-to-br from-academy-gold/20 to-transparent -z-10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                                    <span className="text-sm font-black text-academy-gold uppercase tracking-[0.3em] mb-6 block font-sans">Phase 0{idx + 1}</span>
-                                    <h3 className="text-3xl md:text-4xl font-serif font-black text-academy-navy mb-6 group-hover:text-academy-orange transition-colors">
-                                        {step.t}
-                                    </h3>
-                                    <p className="text-lg text-gray-500 leading-relaxed font-light">
-                                        {step.d}
-                                    </p>
-                                </motion.div>
+                            <div className="space-y-4">
+                                <h3 className="text-3xl font-serif font-black text-academy-navy dark:text-white group-hover:text-academy-orange transition-colors duration-500 italic">
+                                    {step.t}
+                                </h3>
+                                <p className="text-xl text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-2xl">
+                                    {step.d}
+                                </p>
                             </div>
 
-                            {/* Parallax Image Mockup / Visual */}
-                            <div className="hidden md:block w-[42%] aspect-square relative">
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    viewport={{ once: true }}
-                                    className="w-full h-full bg-academy-lightGray/30 rounded-[4rem] border-2 border-dashed border-gray-100 flex items-center justify-center relative group overflow-hidden"
-                                >
-                                    <div className="text-academy-navy/5 font-serif font-black text-9xl absolute pointer-events-none">0{idx + 1}</div>
-                                    <motion.div
-                                        animate={{ y: [0, -10, 0] }}
-                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        className="p-12 bg-white rounded-3xl shadow-xl border border-gray-50 z-10"
-                                    >
-                                        {React.cloneElement(icons[idx] as React.ReactElement, { size: 64, className: "text-academy-gold opacity-50" })}
-                                    </motion.div>
-                                </motion.div>
-                            </div>
+                            <motion.div
+                                initial={{ width: 0 }}
+                                whileInView={{ width: '100%' }}
+                                className="h-[1px] bg-gradient-to-r from-academy-navy/10 dark:from-white/10 to-transparent mt-12"
+                            />
                         </motion.div>
                     ))}
                 </div>
-            </section>
 
-            {/* Premium CTA */}
-            <section className="text-center py-40">
-                <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(255,87,34,0.3)" }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-academy-orange text-white px-16 py-6 rounded-full font-serif font-black text-2xl tracking-tight transition-all"
-                >
-                    {t.admissions.cta}
-                </motion.button>
-            </section>
+                <div className="mt-40 bg-academy-navy dark:bg-white/5 p-16 rounded-[4rem] text-center space-y-8 relative overflow-hidden">
+                    <div className="relative z-10">
+                        <h2 className="text-4xl md:text-5xl font-serif font-black text-white italic">Ready to start?</h2>
+                        <p className="text-gray-400 dark:text-gray-400 text-lg font-light">Your journey to excellence begins with a single step.</p>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="mt-8 px-12 py-5 bg-academy-orange text-white rounded-full font-black uppercase tracking-widest text-sm shadow-2xl shadow-academy-orange/40"
+                        >
+                            Apply Now
+                        </motion.button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

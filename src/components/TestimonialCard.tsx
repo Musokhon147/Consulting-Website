@@ -21,7 +21,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             whileHover={{ y: -10 }}
-            className="bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-gray-100 border border-gray-50 flex flex-col h-full transition-all duration-300 hover:shadow-2xl hover:border-academy-orange/20 group"
+            className="bg-white dark:bg-white/5 rounded-3xl p-8 md:p-10 shadow-xl shadow-gray-100 dark:shadow-none border border-gray-50 dark:border-white/10 flex flex-col h-full transition-all duration-300 hover:shadow-2xl hover:border-academy-orange/20 group"
         >
             <div className="flex items-start space-x-5 mb-8">
                 <div className="relative">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import TestimonialCard from './components/TestimonialCard';
@@ -42,12 +42,12 @@ function App() {
               <motion.h1
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-7xl md:text-9xl font-serif font-black text-academy-navy tracking-tight"
+                className="text-7xl md:text-9xl font-serif font-black text-academy-navy dark:text-white tracking-tight"
               >
                 {t.alumni.title} <br />
                 <span className="text-academy-orange italic">{t.alumni.span}</span>
               </motion.h1>
-              <p className="max-w-3xl mx-auto text-xl md:text-2xl text-gray-500 font-light leading-relaxed">
+              <p className="max-w-3xl mx-auto text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-light leading-relaxed">
                 {t.alumni.desc}
               </p>
             </div>
@@ -97,7 +97,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white relative selection:bg-academy-orange selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-black transition-colors duration-500 relative selection:bg-academy-orange selection:text-white">
       <MeshBackground />
       <GrainOverlay />
 
@@ -133,7 +133,7 @@ function App() {
                   )}
                 </h2>
 
-                <p className="text-gray-400 text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-light">
+                <p className="text-gray-400 dark:text-gray-300 text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-light">
                   {t.cta.desc}
                 </p>
 
