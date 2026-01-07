@@ -14,7 +14,7 @@ const Preloader: React.FC = () => {
         <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
-            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
+            className="fixed inset-0 z-[9999] bg-academy-deepNavy flex items-center justify-center overflow-hidden"
         >
             <div className="relative">
                 <svg
@@ -30,7 +30,7 @@ const Preloader: React.FC = () => {
                         textAnchor="middle"
                         className="font-serif font-black italic tracking-tighter text-6xl md:text-8xl"
                         fill="transparent"
-                        stroke="#FFB800"
+                        stroke="var(--accent-color)"
                         strokeWidth="2"
                         strokeDasharray="1000"
                         strokeDashoffset={draw ? 0 : 1000}
@@ -49,7 +49,7 @@ const Preloader: React.FC = () => {
                         textAnchor="middle"
                         className="font-serif font-black italic tracking-tighter text-6xl md:text-8xl blur-md opacity-50"
                         fill="transparent"
-                        stroke="#FFB800"
+                        stroke="var(--accent-color)"
                         strokeWidth="1"
                         strokeDasharray="1000"
                         strokeDashoffset={draw ? 0 : 1000}

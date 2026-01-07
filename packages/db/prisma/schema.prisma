@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model courses {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime?       @default(now()) @db.Timestamptz(6)
+  title          String
+  description    String?
+  duration       String?
+  level          String?
+  image_url      String?
+  title_en       String?
+  title_uz       String?
+  title_ru       String?
+  description_en String?
+  description_uz String?
+  description_ru String?
+  registrations  registrations[]
+}
+
+model testimonials {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  name       String
+  role       String?
+  quote      String?
+  image_url  String?
+  is_alumni  Boolean?  @default(false)
+  quote_en   String?
+  quote_uz   String?
+  quote_ru   String?
+}
+
+model site_settings {
+  id            BigInt    @id @default(1)
+  font_family   String?   @default("Outfit")
+  dark_mode_bg  String?   @default("#001F47")
+  primary_color String?   @default("#002147")
+  accent_color  String?   @default("#FF8A00")
+  logo_url      String?
+  site_name     String?   @default("FRESHMAN")
+  updated_at    DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model contacts {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  name       String
+  email      String
+  subject    String?
+  message    String
+  is_read    Boolean?  @default(false)
+}
+
+model registrations {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+  student_name  String
+  student_phone String
+  course_id     String?   @db.Uuid
+  status        String?   @default("pending")
+  courses       courses?  @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

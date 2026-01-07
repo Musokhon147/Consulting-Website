@@ -93,7 +93,7 @@ export const MeshBackground: React.FC = () => (
     <div className="mesh-gradient transition-colors duration-500">
         <div className="mesh-blob w-[50vw] h-[50vw] bg-academy-navy/10 dark:bg-academy-orange/10 top-[-10%] left-[-10%] transition-colors duration-500" />
         <div className="mesh-blob w-[40vw] h-[40vw] bg-academy-gold/10 dark:bg-academy-gold/5 bottom-[-10%] right-[-10%] transition-colors duration-500" />
-        <div className="mesh-blob w-[30vw] h-[30vw] bg-academy-orange/5 dark:bg-white/5 top-[20%] right-[10%] transition-colors duration-500" />
+        <div className="mesh-blob w-[30vw] h-[30vw] bg-academy-orange/5 dark:bg-academy-orange/5 top-[20%] right-[10%] transition-colors duration-500" />
     </div>
 );
 

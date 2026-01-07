@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Preloader from './components/Preloader';
 import SmoothScroll from './components/SmoothScroll';
+import AdminPage from './pages/AdminPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import TestimonialCard from './components/TestimonialCard';
@@ -8,6 +9,7 @@ import Hero from './components/Hero';
 import { testimonials } from './data/testimonials';
 import { useTranslation } from './i18n/LanguageContext';
 import { MeshBackground, GrainOverlay } from './components/PremiumEffects';
+import { supabase } from './lib/supabase';
 
 // Pages
 import AboutPage from './pages/AboutPage';
@@ -26,13 +28,31 @@ const pageVariants: any = {
 function App() {
   const [activeTab, setActiveTab] = useState('testimonials');
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+
+
+
+  // ... inside App component
+  const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
+    // Check for admin query param
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'true') {
+      setActiveTab('admin');
+    }
+
+    // Fetch Testimonials
+    const fetchTestimonials = async () => {
+      const { data } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
+      if (data) setItems(data);
+    };
+    fetchTestimonials();
+
     // Simulate initial loading for cinematic effect
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2800); // slightly longer than animation
+    }, 2800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -81,7 +101,32 @@ function App() {
             </div>
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 text-left mt-20">
-              {testimonials.slice(0, 4).map(t => <TestimonialCard key={t.id} testimonial={t} />)}
+              {(items.length > 0 ? items.filter((i: any) => i.is_alumni) : testimonials.slice(0, 4)).map((t: any) => {
+                // Reuse adapter logic (or move to helper)
+                const testimonialData = t.id ? {
+                  id: t.id,
+                  name: t.name || 'Anonymous',
+                  role: t.role || 'Alumni',
+                  university: t.role || 'University',
+                  image: t.image_url || 'https://via.placeholder.com/150',
+                  program: {
+                    en: t.role || 'Alumni',
+                    uz: t.role || 'Bitiruvchi',
+                    ru: t.role || 'Выпускник'
+                  },
+                  heading: {
+                    en: (t.quote || '').substring(0, 20) + '...',
+                    uz: (t.quote || '').substring(0, 20) + '...',
+                    ru: (t.quote || '').substring(0, 20) + '...'
+                  },
+                  content: {
+                    en: [t.quote || 'No content'],
+                    uz: [t.quote || 'No content'],
+                    ru: [t.quote || 'No content']
+                  }
+                } : t;
+                return <TestimonialCard key={t.id} testimonial={testimonialData} />;
+              })}
             </div>
           </div>
         );
@@ -91,10 +136,41 @@ function App() {
             <Hero />
             <section className="py-24 lg:py-40 bg-white/50 relative">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
-                  {testimonials.map((testimonial) => (
-                    <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-                  ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {items.length > 0 ? (
+                    items.map((item) => (
+                      <TestimonialCard
+                        key={item.id}
+                        testimonial={{
+                          ...item,
+                          // Adapt Supabase data to TestimonialCard props
+                          name: item.name || 'Anonymous',
+                          role: item.role || 'Student',
+                          university: item.role || 'University',
+                          image: item.image_url || 'https://via.placeholder.com/150',
+                          program: {
+                            en: item.role || 'Student',
+                            uz: item.role || 'Talaba',
+                            ru: item.role || 'Студент'
+                          },
+                          heading: {
+                            en: (item[`quote_${language}`] || item.quote || '').substring(0, 20) + '...',
+                            uz: (item[`quote_${language}`] || item.quote || '').substring(0, 20) + '...',
+                            ru: (item[`quote_${language}`] || item.quote || '').substring(0, 20) + '...'
+                          },
+                          content: {
+                            en: [item[`quote_${language}`] || item.quote || 'No content'],
+                            uz: [item[`quote_${language}`] || item.quote || 'No content'],
+                            ru: [item[`quote_${language}`] || item.quote || 'No content']
+                          }
+                        }}
+                      />
+                    ))
+                  ) : (
+                    testimonials.map((t, index) => (
+                      <TestimonialCard key={index} testimonial={t} />
+                    ))
+                  )}
                 </div>
               </div>
             </section>
@@ -107,9 +183,17 @@ function App() {
     }
   };
 
+  if (activeTab === 'admin') {
+    return (
+      <SmoothScroll dependency="admin">
+        <AdminPage />
+      </SmoothScroll>
+    );
+  }
+
   return (
     <SmoothScroll dependency={activeTab}>
-      <div className="min-h-screen bg-white dark:bg-black transition-colors duration-500 relative selection:bg-academy-orange selection:text-white">
+      <div className="min-h-screen bg-white dark:bg-academy-deepNavy transition-colors duration-500 relative selection:bg-academy-orange selection:text-white">
         <AnimatePresence mode="wait">
           {loading && <Preloader />}
         </AnimatePresence>
@@ -118,7 +202,7 @@ function App() {
 
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <main className="relative z-10 bg-white dark:bg-black mb-[50vh] shadow-2xl transition-colors duration-500">
+        <main className="relative z-10 bg-white dark:bg-academy-deepNavy mb-[50vh] shadow-2xl transition-colors duration-500">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

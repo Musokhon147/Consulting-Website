@@ -2,6 +2,7 @@
     "name": "freshman-academy-monorepo",
     "private": true,
     "workspaces": [
-        "apps/*"
+        "apps/*",
+        "packages/*"
     ]
 }

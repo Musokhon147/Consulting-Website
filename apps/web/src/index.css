@@ -7,21 +7,25 @@
 :root {
   --cursor-x: 0px;
   --cursor-y: 0px;
+  --site-font: 'Outfit';
+  --dark-bg: #001F47;
+  --primary-color: #002147;
+  --accent-color: #FF8A00;
 }
 
 body {
   margin: 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--site-font), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #ffffff;
-  color: #002147;
+  color: var(--primary-color);
   overflow-x: hidden;
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 .dark body {
-  background-color: #000000;
+  background-color: var(--dark-bg);
   color: #ffffff;
 }
 
@@ -30,7 +34,7 @@ h2,
 h3,
 h4,
 .font-serif {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--site-font), sans-serif;
 }
 
 /* Custom Cursor Styles */
@@ -152,7 +156,7 @@ h4,
 }
 
 .dark .mesh-gradient {
-  background: #000000;
+  background: var(--dark-bg);
 }
 
 .mesh-blob {

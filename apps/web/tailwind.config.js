@@ -9,14 +9,14 @@ export default {
     extend: {
       colors: {
         academy: {
-          navy: '#002147',
+          navy: 'var(--primary-color)',
           gold: '#FFB800',
-          orange: '#FF8A00',
+          orange: 'var(--accent-color)',
           gray: '#333333',
           lightGray: '#F5F5F5',
-          deepNavy: '#000000', // Updated to pure black
-          dark: '#000000',     // Pure black for dark mode
-          light: '#ffffff',    // Pure white for light mode
+          deepNavy: 'var(--dark-bg)', // Dynamic dark mode bg
+          dark: '#000000',
+          light: '#ffffff',
         }
       },
       fontFamily: {
