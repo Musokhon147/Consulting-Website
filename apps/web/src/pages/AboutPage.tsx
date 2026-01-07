@@ -5,6 +5,7 @@ import { useTranslation } from '../i18n/LanguageContext';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { Unmask } from '../components/PremiumEffects';
 import LottieAnimation from '../components/LottieAnimation';
+import ParallaxImage from '../components/ParallaxImage';
 
 const AboutPage: React.FC = () => {
     const { t } = useTranslation();
@@ -90,19 +91,15 @@ const AboutPage: React.FC = () => {
 
             {/* Cinematic Parallax Visual Section */}
             <section className="relative h-[80vh] overflow-hidden">
-                <motion.div
-                    initial={{ scale: 1.2 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ duration: 2 }}
-                    className="absolute inset-0"
-                >
-                    <img
+                <div className="absolute inset-0">
+                    <ParallaxImage
                         src="https://images.unsplash.com/photo-1523050335392-93851179ae22?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80"
                         alt="Success"
-                        className="w-full h-full object-cover grayscale"
+                        className="w-full h-full"
+                        curtainColor="#B8860B"
                     />
-                    <div className="absolute inset-0 bg-academy-navy/60 dark:bg-academy-deepNavy/80 backdrop-blur-sm" />
-                </motion.div>
+                    <div className="absolute inset-0 bg-academy-navy/60 dark:bg-academy-deepNavy/80 backdrop-blur-sm z-30 pointer-events-none" />
+                </div>
 
                 <div className="relative h-full flex items-center justify-center text-center px-6">
                     <div className="space-y-8">

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Preloader from './components/Preloader';
+import SmoothScroll from './components/SmoothScroll';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import TestimonialCard from './components/TestimonialCard';
@@ -23,7 +25,16 @@ const pageVariants: any = {
 
 function App() {
   const [activeTab, setActiveTab] = useState('testimonials');
+  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    // Simulate initial loading for cinematic effect
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2800); // slightly longer than animation
+    return () => clearTimeout(timer);
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -97,64 +108,71 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black transition-colors duration-500 relative selection:bg-academy-orange selection:text-white">
-      <MeshBackground />
-      <GrainOverlay />
-
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      <main className="relative z-10">
+    <SmoothScroll dependency={activeTab}>
+      <div className="min-h-screen bg-white dark:bg-black transition-colors duration-500 relative selection:bg-academy-orange selection:text-white">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-          >
-            {renderContent()}
-          </motion.div>
+          {loading && <Preloader />}
         </AnimatePresence>
+        <MeshBackground />
+        <GrainOverlay />
 
-        {activeTab !== 'contact' && (
-          <section className="py-40 bg-transparent">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-academy-navy rounded-[4rem] p-16 md:p-32 text-center relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,31,63,0.3)]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-tr from-academy-orange/20 via-transparent to-academy-gold/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-                <h2 className="text-5xl md:text-8xl font-serif font-black text-white mb-10 tracking-tight leading-none">
-                  {t.cta.title.split(' ').map((word: string, i: number) =>
-                    word.toLowerCase() === 'future' || word.toLowerCase() === 'kelajagingizni' || word.toLowerCase() === 'будущее' ?
-                      <span key={i} className="text-academy-orange italic block md:inline underline decoration-[6px] underline-offset-[15px]">{word} </span> : word + ' '
-                  )}
-                </h2>
+        <main className="relative z-10 bg-white dark:bg-black mb-[50vh] shadow-2xl transition-colors duration-500">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+            >
+              {renderContent()}
+            </motion.div>
+          </AnimatePresence>
 
-                <p className="text-gray-400 dark:text-gray-300 text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-light">
-                  {t.cta.desc}
-                </p>
+          {activeTab !== 'contact' && (
+            <section className="py-40 bg-transparent">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-academy-navy rounded-[4rem] p-16 md:p-32 text-center relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,31,63,0.3)]"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-tr from-academy-orange/20 via-transparent to-academy-gold/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
-                  <motion.button
-                    whileHover={{ scale: 1.1, boxShadow: "0 20px 40px rgba(255,138,0,0.4)" }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setActiveTab('contact')}
-                    className="bg-academy-orange text-white px-16 py-6 rounded-[2rem] font-black text-2xl shadow-2xl transition-all"
-                  >
-                    {t.cta.button}
-                  </motion.button>
-                </div>
-              </motion.div>
-            </div>
-          </section>
-        )}
-      </main>
+                  <h2 className="text-5xl md:text-8xl font-serif font-black text-white mb-10 tracking-tight leading-none">
+                    {t.cta.title.split(' ').map((word: string, i: number) =>
+                      word.toLowerCase() === 'future' || word.toLowerCase() === 'kelajagingizni' || word.toLowerCase() === 'будущее' ?
+                        <span key={i} className="text-academy-orange italic block md:inline underline decoration-[6px] underline-offset-[15px]">{word} </span> : word + ' '
+                    )}
+                  </h2>
 
-      <Footer />
-    </div>
+                  <p className="text-gray-400 dark:text-gray-300 text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-light">
+                    {t.cta.desc}
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
+                    <motion.button
+                      whileHover={{ scale: 1.1, boxShadow: "0 20px 40px rgba(255,138,0,0.4)" }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setActiveTab('contact')}
+                      className="bg-academy-orange text-white px-16 py-6 rounded-[2rem] font-black text-2xl shadow-2xl transition-all"
+                    >
+                      {t.cta.button}
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+          )}
+        </main>
+
+        <div className="fixed bottom-0 left-0 w-full z-0 h-[50vh]">
+          <Footer />
+        </div>
+      </div>
+    </SmoothScroll>
   );
 }
 
